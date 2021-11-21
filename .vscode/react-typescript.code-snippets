@@ -1,0 +1,55 @@
+{
+  "React Create Default Component": {
+    "scope": "typescriptreact",
+    "prefix": "cdc",
+    "body": [
+      "import React from 'react';",
+      "",
+      "const _kDisplayName = '${1:name}';",
+      "",
+      "export interface ${1:name}Props {}",
+      "",
+      "const ${1:name}: React.FC<${1:name}Props> = (props) => {",
+      "  return (",
+      "    $0",
+      "  );",
+      "};",
+      "",
+      "${1:name}.displayName = _kDisplayName;",
+      "",
+      "export default ${1:name};",
+      ""
+    ]
+  },
+  "React Native Create Default Component": {
+    "scope": "typescriptreact",
+    "prefix": "ndc",
+    "body": [
+      "import React from 'react';",
+      "import { StyleSheet, View } from 'react-native';",
+      "",
+      "const _kDisplayName = '${1:name}';",
+      "",
+      "export interface ${1:name}Props {}",
+      "",
+      "const ${1:name}: React.FC<${1:name}Props> = (props) => {",
+      "  return (",
+      "    <View style={styles.container}>",
+      "      ",
+      "    </View>",
+      "  );",
+      "};",
+      "",
+      "const styles = StyleSheet.create({",
+      "  container: {",
+      "    ",
+      "  },",
+      "});",
+      "",
+      "${1:name}.displayName = _kDisplayName;",
+      "",
+      "export default ${1:name};",
+      ""
+    ]
+  },
+}

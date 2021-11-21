@@ -1,0 +1,41 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "no-multiple-empty-lines": ["warn", { "max": 1, "maxEOF": 1 }], // Пустые строки
+        "comma-dangle": ["warn", "always-multiline"], // висячая запятая
+        "arrow-body-style": ["warn", "as-needed"],
+        "no-extra-semi": ["warn"],
+        "semi": ["warn", "always"],
+        "eol-last": ["warn", "always"],
+        "no-else-return": "error",
+        "no-empty": "warn",
+        "eqeqeq": ["error", "always"],
+        "max-params": ["error", 3],
+        "jsx-quotes": ["error", "prefer-double"],
+        "indent": ["error", 2],
+        "react/jsx-no-bind": ["error"],
+        "@typescript-eslint/no-empty-interface": ["off"],
+        "react/jsx-max-props-per-line": [1, { "when": "always" }],
+        "quotes": ["warn", "double"]
+    }
+}
