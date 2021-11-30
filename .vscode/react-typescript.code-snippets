@@ -17,7 +17,7 @@
       "",
       "${1:name}.displayName = _kDisplayName;",
       "",
-      "export default ${1:name};",
+      "export default React.memo(${1:name});",
       ""
     ]
   },
@@ -32,7 +32,7 @@
       "",
       "export interface ${1:name}Props {}",
       "",
-      "const ${1:name}: React.FC<${1:name}Props> = (props) => {",
+      "const Elem: React.FC<${1:name}Props> = (props) => {",
       "  return (",
       "    <View style={styles.container}>",
       "      ",
@@ -46,7 +46,8 @@
       "  },",
       "});",
       "",
-      "${1:name}.displayName = _kDisplayName;",
+      "Elem.displayName = _kDisplayName;",
+      "const ${1:name} = React.memo(Elem)",
       "",
       "export default ${1:name};",
       ""

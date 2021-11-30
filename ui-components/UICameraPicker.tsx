@@ -1,23 +1,52 @@
 import React from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Text, Button, Image } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { usePlatform } from "../hooks/usePlatform";
-import { useCameraPermition } from "../hooks/useCameraPermition";
+import { useMediaLibrary } from "../hooks/useMediaLibrary";
+import { useCamera } from "../hooks/useCamera";
 
 const _kDisplayName = "UICameraPicker";
 
 export interface UICameraPickerProps {}
 
 const UICameraPicker: React.FC<UICameraPickerProps> = (props) => {
-  const { status, updateStatus, image, pickImage } = useCameraPermition();
+  const [photo, setPhoto] = React.useState(null);
+  const pickImageMediaLibrary = useMediaLibrary();
+  const pickCamera = useCamera();
+
+  const camerahandler = React.useCallback(async () => {
+    console.log("camerahandler");
+    const result: any = await pickCamera();
+    
+    console.log("DONE");
+    console.log(result);
+    setPhoto(result);
+  }, []);
   
   return (
     <View style={styles.container}>
-      <Text>
-        {status}
-      </Text>
+      {
+        photo !== null && <Text>{photo?.uri ?? "OLOLO1"}</Text>
+      }
+      {
+        photo && (
+          <Image
+            source={{
+              uri: photo.uri,
+              width: photo.width,
+              height: photo.height,
+            }}
+          />
+        )
+      }
       <Button
-        onPress={pickImage}
-        title={"try to update"}
+        onPress={pickImageMediaLibrary}
+        title={"requestMediaLibraryPermissionsAsync"}
+      >
+      </Button>
+      <Button
+        onPress={camerahandler}
+        title={"onRequestCameraPermissionsAsync"}
       >
       </Button>
     </View>

@@ -8,6 +8,8 @@ export interface UITextProps extends TextProps { }
 const UIText: React.FC<UITextProps> = (props) => {
   const { style, ...other } = props;
 
+  console.log(1);
+
   return (
     <Text
       {...other}
@@ -18,13 +20,11 @@ const UIText: React.FC<UITextProps> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "pink",
+    backgroundColor: "black",
   },
   view: {},
 });
 
-const getStyles = () => styles;
-
 UIText.displayName = _kDisplayName;
 
-export default UIText;
+export default React.memo(UIText);
