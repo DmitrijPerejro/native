@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, View, FlatList, Text } from "react-native";
+import { StyleSheet, View, FlatList, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import { useDimensions } from "../../hooks/useDimensions";
 import GallerySlide from "./GallerySlide";
+import GalleryThumb from "./GalleryThumb";
 
 const _kDisplayName = "Gallery";
 
@@ -18,28 +19,102 @@ const gallery = [
   "https://ichef.bbci.co.uk/news/976/cpsprodpb/14F60/production/_121565858_hi071950589.jpg",
 ];
 
-const Elem: React.FC= (props) => {
+const thumbSize = 100;
+const separatorSize = 10;
+
+const Elem: React.FC= () => {
   const { width, height } = useDimensions();
-  console.log(1);
+  const [activeThumbIndex, setActiveThumbIndex] = React.useState<number>(0);
+  const refListSlides = React.useRef<FlatList>(null);
+  const refListThumbs = React.useRef<FlatList>(null);
 
   const keyExtractor = React.useCallback((item, index) => (index as number).toString(), []);
-  const renderItem = ({ item }) => (
+  const renderItem = React.useCallback(({ item }: { item: string }) => (
     <GallerySlide
       uri={item}
       width={width}
       height={height}
     />
-  );
+  ), []);
+
+  const _setActiveThumbIndex = React.useCallback((index) => () => {
+    setActiveThumbIndex(index);
+    scrollToindex(index);
+  }, []);
+
+  const scrollToindex = React.useCallback((index) => {
+    refListSlides.current.scrollToOffset({
+      offset: width * index,
+      animated: true,
+    });
+  }, []);
+
+  const _onMomentumScrollEnd = React.useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    setActiveThumbIndex(Math.floor(event.nativeEvent.contentOffset.x / width));
+  }, []);
+
+  React.useEffect(() => {
+    const index = activeThumbIndex;
+    
+    if (index * (thumbSize + separatorSize ) - thumbSize / 2 > width / 2) {
+      refListThumbs.current.scrollToOffset({
+        offset: index * (thumbSize + separatorSize) - width / 2 + thumbSize / 2,
+        animated: true,
+      });
+    } else {
+      refListThumbs.current.scrollToOffset({
+        offset: 0,
+        animated: true,
+      });
+    }
+  }, [activeThumbIndex]);
+
+  const renderThumbs = React.useCallback(({ item, index }: { item: string, index: number }) => (
+    <GalleryThumb
+      uri={item}
+      onPress={_setActiveThumbIndex(index)}
+      isActive={index === activeThumbIndex}
+      thumbSize={thumbSize}
+    />
+  ), [activeThumbIndex]);
+
+  const renderSeparator = React.useCallback(() => (
+    <View style={{width: separatorSize}} />
+  ), []);
 
   return (
-    <View>
+    <View
+      style={{
+        position: "relative",
+      }}
+    >
       <FlatList
+        ref={refListSlides}
         horizontal={true}
         data={gallery}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         pagingEnabled={true}
+        onMomentumScrollEnd={_onMomentumScrollEnd}
       />
+
+      <View style={{
+        position: "absolute",
+        bottom: 80,
+      }}>
+        <FlatList
+          ItemSeparatorComponent={renderSeparator}
+          ref={refListThumbs}
+          horizontal={true}
+          data={gallery}
+          keyExtractor={keyExtractor}
+          renderItem={renderThumbs}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            padding: separatorSize,
+          }}
+        />
+      </View>
     </View>
   );
 };

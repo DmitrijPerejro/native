@@ -9,26 +9,22 @@ export interface GallerySlideProps {
   uri: string;
 }
 
-const Elem: React.FC<GallerySlideProps> = (props) => {
-  console.log(props);
-
-  return (
-    <View>
-      <Image
-        source={{
-          uri: props.uri,
-        }}
-        width={props.width}
-        height={props.height}
-        style={{
-          width: props.width,
-          height: props.height,
-          backgroundColor: "#000",
-        }}
-      />
-    </View>
-  );
-};
+const Elem: React.FC<GallerySlideProps> = (props) => (
+  <View>
+    <Image
+      source={{
+        uri: props.uri,
+      }}
+      width={props.width}
+      height={props.height}
+      style={{
+        width: props.width,
+        height: props.height,
+        backgroundColor: "#000",
+      }}
+    />
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
