@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Image, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Image, Animated, TouchableOpacity } from "react-native";
 
 const _kDisplayName = "GalleryThumb";
 export interface GalleryThumbProps {
@@ -9,38 +9,79 @@ export interface GalleryThumbProps {
   thumbSize: number;
 }
 
-const Elem: React.FC<GalleryThumbProps> = (props) => (
-  <TouchableOpacity
-    activeOpacity={0.9}
-    style={[styles.button, props.isActive ? { borderColor: "red" } : null]}
-    onPress={props.onPress}
-  >
-    <Image
-      source={{
-        uri: props.uri,
-      }}
-      style={[
-        styles.image,
-        {
-          width: props.thumbSize,
-          height: props.thumbSize,
-          borderRadius: 20,
-        },
-        props.isActive ? { borderColor: "red" } : null]}
-    />
-  </TouchableOpacity>
-);
+const Elem: React.FC<GalleryThumbProps> = (props) => {
+  const transformRefCurrent = React.useRef(new Animated.Value(10)).current;
+
+  const rotateTo10 = () => {
+    Animated.timing(transformRefCurrent, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const rotateTo0 = () => {
+    Animated.timing(transformRefCurrent, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const rotate = transformRefCurrent.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["10deg", "0deg"],
+  });
+
+  React.useEffect(() => {
+
+    if (props.isActive) {
+      rotateTo10();
+    } else {
+      rotateTo0();
+    }
+  }, [props.isActive]);
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.9}
+      style={[styles.button, {
+        transform: [
+          {
+            rotateZ: rotate,
+          },
+        ],
+      }]}
+      onPress={props.onPress}
+    >
+      <Image
+        source={{
+          uri: props.uri,
+        }}
+        style={[
+          styles.image,
+          {
+            borderRadius: 15,
+            borderColor: "black",
+            borderWidth: 5,
+            width: props.thumbSize,
+            height: props.thumbSize,
+          },
+          props.isActive ? {
+            borderColor: "red",
+          } : null,
+        ]}
+      />
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {},
-  image: {
-    borderWidth: 2,
-    borderColor: "transparent",
-    borderStyle: "solid",
-    backgroundColor: "#000",
-    borderRadius: 20,
+  image: {},
+  button: {
+
   },
-  button: {},
 });
 
 Elem.displayName = _kDisplayName;

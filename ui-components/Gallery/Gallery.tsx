@@ -39,13 +39,13 @@ const Elem: React.FC= () => {
 
   const _setActiveThumbIndex = React.useCallback((index) => () => {
     setActiveThumbIndex(index);
-    scrollToindex(index);
-  }, []);
+    scrollToindex(index, Math.abs(activeThumbIndex - index) < 2);
+  }, [activeThumbIndex]);
 
-  const scrollToindex = React.useCallback((index) => {
+  const scrollToindex = React.useCallback((index: number, useAnimated: boolean) => {
     refListSlides.current.scrollToOffset({
       offset: width * index,
-      animated: true,
+      animated: useAnimated,
     });
   }, []);
 
@@ -58,7 +58,7 @@ const Elem: React.FC= () => {
     
     if (index * (thumbSize + separatorSize ) - thumbSize / 2 > width / 2) {
       refListThumbs.current.scrollToOffset({
-        offset: index * (thumbSize + separatorSize) - width / 2 + thumbSize / 2,
+        offset: index * (thumbSize + separatorSize) - width / 2 + thumbSize / 2 + separatorSize,
         animated: true,
       });
     } else {
@@ -120,9 +120,7 @@ const Elem: React.FC= () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    
-  },
+  container: {},
 });
 
 Elem.displayName = _kDisplayName;
