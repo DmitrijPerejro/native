@@ -10,51 +10,45 @@ export interface GalleryThumbProps {
 }
 
 const Elem: React.FC<GalleryThumbProps> = (props) => {
-  const transformRefCurrent = React.useRef(new Animated.Value(10)).current;
+  const color = React.useRef(new Animated.Value(0)).current;
 
-  const rotateTo10 = () => {
-    Animated.timing(transformRefCurrent, {
+  const colorToActive = () => {
+    Animated.timing(color, {
       toValue: 1,
       duration: 300,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
   };
 
-  const rotateTo0 = () => {
-    Animated.timing(transformRefCurrent, {
+  const colorToPrimary = () => {
+    Animated.timing(color, {
       toValue: 0,
       duration: 300,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
   };
 
-  const rotate = transformRefCurrent.interpolate({
+  const colorr = color.interpolate({
     inputRange: [0, 1],
-    outputRange: ["10deg", "0deg"],
+    outputRange: ["rgba(0, 0, 0, 0)", "rgb(0, 255, 0)"],
   });
 
   React.useEffect(() => {
-
     if (props.isActive) {
-      rotateTo10();
+      colorToActive();
     } else {
-      rotateTo0();
+      colorToPrimary();
     }
+
   }, [props.isActive]);
 
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      style={[styles.button, {
-        transform: [
-          {
-            rotateZ: rotate,
-          },
-        ],
-      }]}
+      style={[styles.button]}
       onPress={props.onPress}
     >
-      <Image
+      <Animated.Image
         source={{
           uri: props.uri,
         }}
@@ -62,14 +56,13 @@ const Elem: React.FC<GalleryThumbProps> = (props) => {
           styles.image,
           {
             borderRadius: 15,
-            borderColor: "black",
-            borderWidth: 5,
+            borderWidth: 2,
+            borderColor: colorr,
             width: props.thumbSize,
             height: props.thumbSize,
+            backgroundColor: colorr,
           },
-          props.isActive ? {
-            borderColor: "red",
-          } : null,
+
         ]}
       />
     </TouchableOpacity>
@@ -79,9 +72,7 @@ const Elem: React.FC<GalleryThumbProps> = (props) => {
 const styles = StyleSheet.create({
   container: {},
   image: {},
-  button: {
-
-  },
+  button: {},
 });
 
 Elem.displayName = _kDisplayName;
