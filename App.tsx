@@ -4,6 +4,7 @@ import UIText from "./ui-components/UIText";
 import UICameraPicker from "./ui-components/UICameraPicker";
 import List from "./ui-components/List";
 import Gallery from "./ui-components/Gallery/Gallery";
+import Slider from "./ui-components/Slider";
 
 const _kDisplayName = "App";
 
@@ -16,13 +17,14 @@ interface IText {
 
 const App: React.FC<AppProps> = (props) => (
   <View style={styles.container}>
-    <Gallery />
+    <Slider />
   </View>
 );
 
 const styles = StyleSheet.create({
   container: {
-    
+    backgroundColor: "pink",
+    flex: 1,
   },
   text: {
     color: "#fff",
